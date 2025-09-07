@@ -11,7 +11,7 @@ import {
   ResetPassword,
 } from "./pages";
 import { AuthLayout, MasterLayout } from "./components";
-
+import { ToastContainer } from "react-toastify";
 function App() {
   const routes = createBrowserRouter([
     {
@@ -88,6 +88,7 @@ function App() {
   ]);
   return (
     <>
+      <ToastContainer />
       <RouterProvider router={routes}></RouterProvider>
     </>
   );

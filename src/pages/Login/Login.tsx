@@ -7,8 +7,40 @@ import {
   Button,
   Stack,
 } from "@mui/material";
+import { useForm } from "react-hook-form";
 import Item from "@mui/material/Grid";
+import type { LoginInputs } from "@/interfaces/Interfaces";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInputs>();
+  const navigate = useNavigate();
+  const profileData = JSON.parse(String(localStorage.getItem("profile")));
+  const login = async (data: LoginInputs) => {
+    try {
+      const response = await axios.post(
+        "https://upskilling-egypt.com:3007/api/auth/login",
+        data
+      );
+      console.log(response);
+      localStorage.setItem("token", response?.data?.data?.accessToken);
+      localStorage.setItem(
+        "profile",
+        JSON.stringify(response?.data?.data?.profile)
+      );
+      toast.success(`Welcome to the Book Store , ${profileData?.first_name}`);
+      navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+      toast.error("Login Failed !");
+    }
+  };
   return (
     <>
       <div className="text-start mb-4">
@@ -17,7 +49,7 @@ const Login = () => {
         </Typography>
         <h3 className="fw-bold">Login to your account</h3>
       </div>
-      <Box component="form">
+      <Box component="form" onSubmit={handleSubmit(login)}>
         <TextField
           type="email"
           id="email"
@@ -25,7 +57,11 @@ const Login = () => {
           label="E-mail"
           variant="outlined"
           sx={{ width: "100%", marginBottom: "30px" }}
+          {...register("email", { required: "email is required" })}
+          error={!!errors?.email}
+          helperText={errors?.email?.message}
         />
+
         <TextField
           type="password"
           id="email"
@@ -33,7 +69,11 @@ const Login = () => {
           label="password"
           variant="outlined"
           sx={{ width: "100%" }}
+          {...register("password", { required: "password is required" })}
+          error={!!errors?.password}
+          helperText={errors?.email?.message}
         />
+
         <Grid container sx={{ justifyContent: "space-between" }}>
           <Item display="flex" alignItems="center">
             <Checkbox color="secondary" />
@@ -53,7 +93,6 @@ const Login = () => {
             </Typography>
           </Item>
         </Grid>
-
         <Stack className="d-flex flex-column" marginY={"20px"}>
           <Button
             type="submit"
