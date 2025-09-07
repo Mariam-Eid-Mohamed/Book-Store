@@ -22,9 +22,9 @@ export default function AuthLayout() {
             justifyContent: "center",
             alignItems: "center",
             height: "100vh",
-            // margin: "auto",
-            // overflow: "auto",
-            // pt: "20px",
+            margin: "auto",
+            overflow: "auto",
+            pt: "20px",
           }}
         >
           <img src={logo} alt="logo" className="mb-5" />
