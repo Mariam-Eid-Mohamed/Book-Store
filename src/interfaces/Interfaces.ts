@@ -12,3 +12,9 @@ export interface RegisterInputs {
   password: string;
   role: string;
 }
+
+export interface ResetInputs {
+  otp: string;
+  email: string;
+  password: string;
+}

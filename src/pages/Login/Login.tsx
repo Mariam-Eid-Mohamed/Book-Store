@@ -83,7 +83,7 @@ const Login = () => {
           </Item>
 
           <Item
-            // onClick={() => navigate("/forgot")}
+            onClick={() => navigate("/forget-Password")}
             display="flex"
             alignItems="center"
             sx={{ cursor: "pointer" }}
