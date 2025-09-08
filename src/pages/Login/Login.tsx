@@ -71,7 +71,7 @@ const Login = () => {
           sx={{ width: "100%" }}
           {...register("password", { required: "password is required" })}
           error={!!errors?.password}
-          helperText={errors?.email?.message}
+          helperText={errors?.password?.message}
         />
 
         <Grid container sx={{ justifyContent: "space-between" }}>

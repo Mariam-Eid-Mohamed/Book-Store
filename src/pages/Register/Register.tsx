@@ -1,3 +1,4 @@
+import type { RegisterInputs } from "@/interfaces/Interfaces";
 import {
   Box,
   Typography,
@@ -10,8 +11,33 @@ import {
   Stack,
   Button,
 } from "@mui/material";
+import axios from "axios";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<RegisterInputs>();
+  const Regsubmit = async (data: RegisterInputs) => {
+    try {
+      await axios.post(
+        "https://upskilling-egypt.com:3007/api/auth/register",
+        data
+      );
+      toast.success("Registered succesfully");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      toast.error("Register failed!");
+      console.log(data);
+    }
+  };
   return (
     <>
       <div className="text-start mb-4">
@@ -20,7 +46,7 @@ const Register = () => {
         </Typography>
         <h3 className="fw-bold">Register</h3>
       </div>
-      <Box component="form">
+      <Box component="form" onSubmit={handleSubmit(Regsubmit)}>
         <Grid
           sx={{
             display: "flex",
@@ -35,6 +61,9 @@ const Register = () => {
             variant="outlined"
             type="string"
             autoComplete="firstName"
+            {...register("first_name", { required: "first name  is required" })}
+            error={!!errors?.first_name}
+            helperText={errors?.first_name?.message}
           />
           <TextField
             id="lastName"
@@ -42,6 +71,9 @@ const Register = () => {
             variant="outlined"
             type="string"
             autoComplete="firstName"
+            {...register("last_name", { required: "last name  is required" })}
+            error={!!errors?.last_name}
+            helperText={errors?.last_name?.message}
           />
         </Grid>
         <TextField
@@ -51,11 +83,10 @@ const Register = () => {
           label="E-mail"
           variant="outlined"
           sx={{ width: "100%", marginBottom: "30px" }}
-          // {...register("email", { required: "email is required" })}
-          // error={!!errors?.email}
-          // helperText={errors?.email?.message}
+          {...register("email", { required: "email is required" })}
+          error={!!errors?.email}
+          helperText={errors?.email?.message}
         />
-
         <TextField
           type="password"
           id="email"
@@ -63,23 +94,33 @@ const Register = () => {
           label="password"
           variant="outlined"
           sx={{ width: "100%", marginBottom: "30px" }}
-          // {...register("password", { required: "password is required" })}
-          // error={!!errors?.password}
-          // helperText={errors?.email?.message}
+          {...register("password", { required: "password is required" })}
+          error={!!errors?.password}
+          helperText={errors?.password?.message}
         />
-        <FormControl fullWidth>
-          <InputLabel>Role</InputLabel>
-          <Select
-            // value={role}
-            label="Role"
-            // onChange={handleChange}
-          >
-            <MenuItem disabled value={"Admin"}>
-              Admin
-            </MenuItem>
-            <MenuItem value={"Customer"}>Customer</MenuItem>
-          </Select>
-        </FormControl>
+
+        <Controller
+          name="role"
+          defaultValue=""
+          control={control}
+          rules={{ required: "role is required !" }}
+          render={({ field }) => (
+            <FormControl fullWidth error={!!errors.role}>
+              <InputLabel>Role *</InputLabel>
+              <Select {...field} label="Role *" defaultValue="">
+                <MenuItem disabled value={"Admin"}>
+                  Admin
+                </MenuItem>
+                <MenuItem value={"Customer"}>Customer</MenuItem>
+              </Select>
+              {errors.role && (
+                <Typography variant="caption" color="error">
+                  {errors.role.message}
+                </Typography>
+              )}
+            </FormControl>
+          )}
+        />
         <Stack className="d-flex flex-column" marginY={"20px"}>
           <Button
             type="submit"
@@ -88,7 +129,12 @@ const Register = () => {
           >
             Register
           </Button>
-          <Button variant="outlined" color="secondary" className="p-2 fs-6">
+          <Button
+            onClick={() => navigate("/login")}
+            variant="outlined"
+            color="secondary"
+            className="p-2 fs-6"
+          >
             Login
           </Button>
         </Stack>
