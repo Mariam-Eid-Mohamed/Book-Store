@@ -24,7 +24,7 @@ export default function AuthLayout() {
             height: "100vh",
             margin: "auto",
             overflow: "auto",
-            pt: "20px",
+            pt: "30px",
           }}
         >
           <img src={logo} alt="logo" className="mb-5" />

@@ -101,7 +101,12 @@ const Login = () => {
           >
             Login
           </Button>
-          <Button variant="outlined" color="secondary" className="p-2 fs-6">
+          <Button
+            onClick={() => navigate("/register")}
+            variant="outlined"
+            color="secondary"
+            className="p-2 fs-6"
+          >
             Register
           </Button>
         </Stack>

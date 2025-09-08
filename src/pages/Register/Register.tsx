@@ -61,7 +61,9 @@ const Register = () => {
             variant="outlined"
             type="string"
             autoComplete="firstName"
-            {...register("first_name", { required: "first name  is required" })}
+            {...register("first_name", {
+              required: "first name  is required",
+            })}
             error={!!errors?.first_name}
             helperText={errors?.first_name?.message}
           />
