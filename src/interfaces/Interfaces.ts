@@ -18,3 +18,7 @@ export interface ResetInputs {
   email: string;
   password: string;
 }
+export interface ChangePassInputs {
+  password: string;
+  password_new: string;
+}
